@@ -1,0 +1,885 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLON BRICK - Configuración</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: hsl(240, 10%, 5%);
+            --bg-secondary: hsl(240, 8%, 8%);
+            --bg-tertiary: hsl(240, 6%, 12%);
+            --bg-elevated: hsl(240, 5%, 15%);
+            --text-primary: hsl(0, 0%, 96%);
+            --text-secondary: hsl(240, 3%, 66%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 5%, 34%);
+            --accent-primary: hsl(270, 80%, 60%);
+            --accent-primary-hover: hsl(270, 80%, 65%);
+            --accent-primary-alpha: hsla(270, 80%, 60%, 0.1);
+            --accent-secondary: hsl(280, 60%, 70%);
+            --accent-tertiary: hsl(250, 70%, 55%);
+            --success: hsl(180, 60%, 45%);
+            --warning: hsl(45, 70%, 50%);
+            --danger: hsl(0, 70%, 50%);
+            --highlight: var(--accent-secondary);
+            --highlight-alpha: hsla(280, 60%, 70%, 0.1);
+            --border-subtle: hsla(0, 0%, 100%, 0.05);
+            --border-default: hsla(0, 0%, 100%, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, hsl(290, 80%, 60%) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            --transition-base: 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: hsl(0, 0%, 100%);
+            --bg-secondary: hsl(240, 5%, 98%);
+            --bg-tertiary: hsl(240, 5%, 96%);
+            --bg-elevated: hsl(0, 0%, 100%);
+            --text-primary: hsl(240, 10%, 10%);
+            --text-secondary: hsl(240, 5%, 34%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 3%, 66%);
+            --accent-primary: hsl(270, 80%, 50%);
+            --accent-primary-hover: hsl(270, 80%, 45%);
+            --accent-primary-alpha: hsla(270, 80%, 50%, 0.1);
+            --border-subtle: hsla(240, 10%, 10%, 0.06);
+            --border-default: hsla(240, 10%, 10%, 0.12);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            background: var(--gradient-dark);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all var(--transition-base);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-right: 80px;
+        }
+
+        .cta-nav {
+            padding: 12px 32px;
+            background: transparent;
+            color: var(--accent-primary);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+
+        .cta-nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width var(--transition-base);
+        }
+
+        .cta-nav:hover::after {
+            width: 100%;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .theme-icon svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        [data-theme="dark"] .sun {
+            opacity: 1;
+        }
+
+        [data-theme="dark"] .moon {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(-180deg);
+        }
+
+        [data-theme="light"] .sun {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+
+        [data-theme="light"] .moon {
+            opacity: 1;
+        }
+
+        /* Settings Container */
+        .settings-container {
+            min-height: 100vh;
+            padding: 120px 48px 80px;
+        }
+
+        .settings-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .settings-header {
+            margin-bottom: 48px;
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .settings-title {
+            font-size: 32px;
+            font-weight: 200;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .settings-subtitle {
+            font-size: 14px;
+            color: var(--text-tertiary);
+        }
+
+        /* Settings Grid */
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            gap: 48px;
+        }
+
+        /* Settings Sidebar */
+        .settings-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .settings-nav-item {
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: all var(--transition-base);
+            cursor: pointer;
+            position: relative;
+        }
+
+        .settings-nav-item:hover {
+            background: var(--accent-primary-alpha);
+            color: var(--text-primary);
+        }
+
+        .settings-nav-item.active {
+            background: var(--accent-primary-alpha);
+            color: var(--accent-primary);
+        }
+
+        .settings-nav-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: var(--accent-primary);
+            border-radius: 0 3px 3px 0;
+        }
+
+        /* Settings Content */
+        .settings-content {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .settings-section {
+            display: none;
+            animation: slideIn 0.3s ease;
+        }
+
+        .settings-section.active {
+            display: block;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateX(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateX(0);
+            }
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all var(--transition-base);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-alpha);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Toggle Switch */
+        .toggle-group {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .toggle-label {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .toggle-title {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .toggle-description {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .toggle-switch {
+            position: relative;
+            width: 48px;
+            height: 24px;
+            background: var(--border-default);
+            border-radius: 24px;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .toggle-slider {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 20px;
+            height: 20px;
+            background: var(--text-primary);
+            border-radius: 50%;
+            transition: all var(--transition-base);
+        }
+
+        .toggle-switch input:checked ~ .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        .toggle-switch input:checked ~ .toggle-switch {
+            background: var(--accent-primary);
+        }
+
+        .toggle-switch.active {
+            background: var(--accent-primary);
+        }
+
+        .toggle-switch.active .toggle-slider {
+            transform: translateX(24px);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+            padding-top: 32px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .btn {
+            padding: 12px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        .btn-danger {
+            background: transparent;
+            border: 1px solid var(--danger);
+            color: var(--danger);
+        }
+
+        .btn-danger:hover {
+            background: var(--danger);
+            color: white;
+        }
+
+        /* Alert Box */
+        .alert {
+            padding: 16px;
+            background: var(--success);
+            background: var(--accent-primary-alpha);
+            border: 1px solid var(--accent-primary);
+            border-radius: 8px;
+            margin-bottom: 24px;
+            display: none;
+        }
+
+        .alert.show {
+            display: block;
+            animation: slideDown 0.3s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-10px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .alert-success {
+            background: hsla(180, 60%, 45%, 0.1);
+            border-color: var(--success);
+            color: var(--success);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 24px;
+            }
+
+            .settings-container {
+                padding: 100px 24px 60px;
+            }
+
+            .settings-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .settings-sidebar {
+                flex-direction: row;
+                overflow-x: auto;
+                gap: 8px;
+                padding-bottom: 16px;
+            }
+
+            .settings-nav-item {
+                white-space: nowrap;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+
+            .toggle-group {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 16px;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">CLON · BRICK</div>
+            <div class="nav-actions">
+                <a href="/profile" class="cta-nav">MI PERFIL</a>
+                <a href="/" class="cta-nav">INICIO</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <div class="theme-icon">
+            <svg class="sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+    </button>
+
+    <!-- Settings Container -->
+    <div class="settings-container">
+        <div class="settings-wrapper">
+            <!-- Header -->
+            <div class="settings-header">
+                <h1 class="settings-title">Configuración</h1>
+                <p class="settings-subtitle">Administra tu cuenta y preferencias</p>
+            </div>
+
+            <!-- Settings Grid -->
+            <div class="settings-grid">
+                <!-- Sidebar -->
+                <div class="settings-sidebar">
+                    <a href="#personal" class="settings-nav-item active" onclick="switchSection('personal')">Información Personal</a>
+                    <a href="#security" class="settings-nav-item" onclick="switchSection('security')">Seguridad</a>
+                    <a href="#notifications" class="settings-nav-item" onclick="switchSection('notifications')">Notificaciones</a>
+                    <a href="#payments" class="settings-nav-item" onclick="switchSection('payments')">Métodos de Pago</a>
+                    <a href="#documents" class="settings-nav-item" onclick="switchSection('documents')">Documentos KYC</a>
+                    <a href="#preferences" class="settings-nav-item" onclick="switchSection('preferences')">Preferencias</a>
+                </div>
+
+                <!-- Content -->
+                <div class="settings-content">
+                    <!-- Alert -->
+                    <div class="alert alert-success" id="saveAlert">
+                        Cambios guardados exitosamente
+                    </div>
+
+                    <!-- Personal Information Section -->
+                    <div class="settings-section active" id="personal">
+                        <h2 class="section-title">Información Personal</h2>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nombre</label>
+                                <input type="text" class="form-input" value="Juan" placeholder="Tu nombre">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Apellido</label>
+                                <input type="text" class="form-input" value="Pérez" placeholder="Tu apellido">
+                            </div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Email</label>
+                            <input type="email" class="form-input" value="juan.perez@email.com" placeholder="tu@email.com">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Teléfono</label>
+                            <input type="tel" class="form-input" value="+57 300 123 4567" placeholder="+57 300 000 0000">
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Identificación</label>
+                            <input type="text" class="form-input" value="1234567890" placeholder="Número de documento">
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="saveChanges()">Guardar Cambios</button>
+                            <button class="btn btn-secondary">Cancelar</button>
+                        </div>
+                    </div>
+
+                    <!-- Security Section -->
+                    <div class="settings-section" id="security">
+                        <h2 class="section-title">Seguridad</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Contraseña Actual</label>
+                            <input type="password" class="form-input" placeholder="••••••••">
+                        </div>
+
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Nueva Contraseña</label>
+                                <input type="password" class="form-input" placeholder="••••••••">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Confirmar Contraseña</label>
+                                <input type="password" class="form-input" placeholder="••••••••">
+                            </div>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Autenticación de dos factores</div>
+                                <div class="toggle-description">Añade una capa extra de seguridad a tu cuenta</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="saveChanges()">Actualizar Contraseña</button>
+                            <button class="btn btn-secondary">Cancelar</button>
+                        </div>
+                    </div>
+
+                    <!-- Notifications Section -->
+                    <div class="settings-section" id="notifications">
+                        <h2 class="section-title">Notificaciones</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Notificaciones por Email</div>
+                                <div class="toggle-description">Recibe actualizaciones sobre tus inversiones</div>
+                            </div>
+                            <label class="toggle-switch active">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Alertas de Precio</div>
+                                <div class="toggle-description">Notificaciones cuando el precio de BRICK cambie</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Newsletter Mensual</div>
+                                <div class="toggle-description">Resumen mensual del proyecto y novedades</div>
+                            </div>
+                            <label class="toggle-switch active">
+                                <input type="checkbox" checked>
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Notificaciones SMS</div>
+                                <div class="toggle-description">Alertas importantes por mensaje de texto</div>
+                            </div>
+                            <label class="toggle-switch">
+                                <input type="checkbox">
+                                <span class="toggle-slider"></span>
+                            </label>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="saveChanges()">Guardar Preferencias</button>
+                        </div>
+                    </div>
+
+                    <!-- Payments Section -->
+                    <div class="settings-section" id="payments">
+                        <h2 class="section-title">Métodos de Pago</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Wallet Blockchain</label>
+                            <input type="text" class="form-input" value="0x742d35Cc6634C0532925a3b844Bc9e7595f0bEb7" readonly>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Cuenta Bancaria Principal</label>
+                            <input type="text" class="form-input" value="**** **** **** 4567" readonly>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary">Añadir Método de Pago</button>
+                            <button class="btn btn-secondary">Gestionar Wallets</button>
+                        </div>
+                    </div>
+
+                    <!-- Documents Section -->
+                    <div class="settings-section" id="documents">
+                        <h2 class="section-title">Documentos KYC</h2>
+                        
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Documento de Identidad</div>
+                                <div class="toggle-description">Verificado el 15 de Enero 2024</div>
+                            </div>
+                            <span style="color: var(--success); font-size: 12px;">✓ Verificado</span>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Comprobante de Domicilio</div>
+                                <div class="toggle-description">Verificado el 15 de Enero 2024</div>
+                            </div>
+                            <span style="color: var(--success); font-size: 12px;">✓ Verificado</span>
+                        </div>
+
+                        <div class="toggle-group">
+                            <div class="toggle-label">
+                                <div class="toggle-title">Declaración de Origen de Fondos</div>
+                                <div class="toggle-description">Pendiente de verificación</div>
+                            </div>
+                            <span style="color: var(--warning); font-size: 12px;">⏳ Pendiente</span>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary">Subir Documento</button>
+                            <button class="btn btn-secondary">Ver Documentos</button>
+                        </div>
+                    </div>
+
+                    <!-- Preferences Section -->
+                    <div class="settings-section" id="preferences">
+                        <h2 class="section-title">Preferencias</h2>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Idioma</label>
+                            <select class="form-input">
+                                <option>Español</option>
+                                <option>English</option>
+                                <option>Português</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Moneda de Visualización</label>
+                            <select class="form-input">
+                                <option>COP - Peso Colombiano</option>
+                                <option>USD - Dólar Americano</option>
+                                <option>EUR - Euro</option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Zona Horaria</label>
+                            <select class="form-input">
+                                <option>América/Bogotá (GMT-5)</option>
+                                <option>América/Mexico_City (GMT-6)</option>
+                                <option>América/New_York (GMT-4)</option>
+                            </select>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-primary" onclick="saveChanges()">Guardar Preferencias</button>
+                            <button class="btn btn-danger">Eliminar Cuenta</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '/login';
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Switch Sections
+        function switchSection(sectionId) {
+            // Hide all sections
+            document.querySelectorAll('.settings-section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // Remove active from all nav items
+            document.querySelectorAll('.settings-nav-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            
+            // Show selected section
+            document.getElementById(sectionId).classList.add('active');
+            
+            // Add active to clicked nav item
+            event.target.classList.add('active');
+        }
+
+        // Save Changes
+        function saveChanges() {
+            const alert = document.getElementById('saveAlert');
+            alert.classList.add('show');
+            
+            setTimeout(() => {
+                alert.classList.remove('show');
+            }, 3000);
+        }
+
+        // Toggle switches
+        document.querySelectorAll('.toggle-switch input').forEach(toggle => {
+            toggle.addEventListener('change', function() {
+                if (this.checked) {
+                    this.parentElement.classList.add('active');
+                } else {
+                    this.parentElement.classList.remove('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

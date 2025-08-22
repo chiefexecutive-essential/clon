@@ -1,0 +1,757 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLON BRICK - Mi Perfil</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: hsl(240, 10%, 5%);
+            --bg-secondary: hsl(240, 8%, 8%);
+            --bg-tertiary: hsl(240, 6%, 12%);
+            --bg-elevated: hsl(240, 5%, 15%);
+            --text-primary: hsl(0, 0%, 96%);
+            --text-secondary: hsl(240, 3%, 66%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 5%, 34%);
+            --accent-primary: hsl(270, 80%, 60%);
+            --accent-primary-hover: hsl(270, 80%, 65%);
+            --accent-primary-alpha: hsla(270, 80%, 60%, 0.1);
+            --accent-secondary: hsl(280, 60%, 70%);
+            --accent-tertiary: hsl(250, 70%, 55%);
+            --success: hsl(180, 60%, 45%);
+            --highlight: var(--accent-secondary);
+            --highlight-alpha: hsla(280, 60%, 70%, 0.1);
+            --border-subtle: hsla(0, 0%, 100%, 0.05);
+            --border-default: hsla(0, 0%, 100%, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, hsl(290, 80%, 60%) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            --transition-base: 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: hsl(0, 0%, 100%);
+            --bg-secondary: hsl(240, 5%, 98%);
+            --bg-tertiary: hsl(240, 5%, 96%);
+            --bg-elevated: hsl(0, 0%, 100%);
+            --text-primary: hsl(240, 10%, 10%);
+            --text-secondary: hsl(240, 5%, 34%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 3%, 66%);
+            --accent-primary: hsl(270, 80%, 50%);
+            --accent-primary-hover: hsl(270, 80%, 45%);
+            --accent-primary-alpha: hsla(270, 80%, 50%, 0.1);
+            --accent-secondary: hsl(280, 60%, 60%);
+            --accent-tertiary: hsl(250, 70%, 45%);
+            --success: hsl(180, 60%, 40%);
+            --highlight: var(--accent-secondary);
+            --highlight-alpha: hsla(280, 60%, 60%, 0.1);
+            --border-subtle: hsla(240, 10%, 10%, 0.06);
+            --border-default: hsla(240, 10%, 10%, 0.12);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, hsl(290, 80%, 50%) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-secondary) 0%, var(--bg-tertiary) 100%);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            background: var(--gradient-dark);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all var(--transition-base);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+            transition: color var(--transition-base);
+        }
+
+        .nav-actions {
+            display: flex;
+            align-items: center;
+            gap: 24px;
+            margin-right: 80px;
+        }
+
+        .cta-nav {
+            padding: 12px 32px;
+            background: transparent;
+            color: var(--accent-primary);
+            font-size: 11px;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            text-decoration: none;
+            font-weight: 500;
+            transition: all var(--transition-base);
+            border: none;
+            position: relative;
+        }
+
+        .cta-nav::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 0;
+            height: 2px;
+            background: var(--accent-primary);
+            transition: width var(--transition-base);
+        }
+
+        .cta-nav:hover {
+            color: var(--text-primary);
+            transform: translateY(-2px);
+        }
+
+        .cta-nav:hover::after {
+            width: 100%;
+        }
+
+        .cta-nav.secondary {
+            color: var(--accent-secondary);
+        }
+
+        .cta-nav.secondary::after {
+            background: var(--accent-secondary);
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .theme-icon svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        [data-theme="dark"] .sun {
+            opacity: 1;
+        }
+
+        [data-theme="dark"] .moon {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(-180deg);
+        }
+
+        [data-theme="light"] .sun {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+
+        [data-theme="light"] .moon {
+            opacity: 1;
+        }
+
+        /* Profile Styles */
+        .profile-container {
+            min-height: 100vh;
+            padding: 120px 48px 80px;
+        }
+
+        .profile-wrapper {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 48px;
+            margin-bottom: 48px;
+            padding-bottom: 48px;
+            border-bottom: 1px solid var(--border-subtle);
+            animation: fadeIn 0.6s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .profile-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            background: var(--gradient-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            color: white;
+            font-weight: 200;
+            position: relative;
+            flex-shrink: 0;
+        }
+
+        .profile-avatar::after {
+            content: '';
+            position: absolute;
+            inset: -4px;
+            border-radius: 50%;
+            border: 2px solid var(--accent-primary);
+            opacity: 0.3;
+        }
+
+        .profile-info {
+            flex: 1;
+        }
+
+        .profile-name {
+            font-size: 32px;
+            font-weight: 200;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .profile-email {
+            font-size: 14px;
+            color: var(--text-tertiary);
+            margin-bottom: 16px;
+        }
+
+        .profile-badges {
+            display: flex;
+            gap: 12px;
+            flex-wrap: wrap;
+        }
+
+        .badge {
+            padding: 6px 12px;
+            background: var(--accent-primary-alpha);
+            border: 1px solid var(--accent-primary);
+            border-radius: 20px;
+            font-size: 10px;
+            color: var(--accent-primary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .profile-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 24px;
+            margin-bottom: 48px;
+        }
+
+        .stat-card {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 24px;
+            text-align: center;
+            transition: all var(--transition-base);
+            animation: slideUp 0.6s ease backwards;
+        }
+
+        .stat-card:nth-child(1) { animation-delay: 0.1s; }
+        .stat-card:nth-child(2) { animation-delay: 0.2s; }
+        .stat-card:nth-child(3) { animation-delay: 0.3s; }
+        .stat-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .stat-card:hover {
+            transform: translateY(-4px);
+            border-color: var(--accent-primary);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .stat-value {
+            font-size: 32px;
+            font-weight: 200;
+            color: var(--text-primary);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 10px;
+            color: var(--text-tertiary);
+            letter-spacing: 0.1em;
+            text-transform: uppercase;
+        }
+
+        .profile-content {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 48px;
+        }
+
+        .profile-sidebar {
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .sidebar-menu {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 8px;
+        }
+
+        .menu-item {
+            display: block;
+            padding: 12px 16px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-size: 13px;
+            border-radius: 8px;
+            transition: all var(--transition-base);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .menu-item:hover {
+            background: var(--accent-primary-alpha);
+            color: var(--text-primary);
+        }
+
+        .menu-item.active {
+            background: var(--accent-primary-alpha);
+            color: var(--accent-primary);
+        }
+
+        .menu-item.active::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 50%;
+            transform: translateY(-50%);
+            width: 3px;
+            height: 60%;
+            background: var(--accent-primary);
+            border-radius: 0 3px 3px 0;
+        }
+
+        .profile-main {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 18px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 24px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .investment-list {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .investment-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            transition: all var(--transition-base);
+            border: 1px solid transparent;
+        }
+
+        .investment-item:hover {
+            background: var(--bg-tertiary);
+            transform: translateX(4px);
+            border-color: var(--accent-primary);
+        }
+
+        .investment-details {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .investment-title {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .investment-date {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .investment-amount {
+            text-align: right;
+        }
+
+        .amount-value {
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 300;
+        }
+
+        .amount-bricks {
+            font-size: 11px;
+            color: var(--success);
+        }
+
+        .logout-btn {
+            width: 100%;
+            padding: 12px;
+            background: transparent;
+            border: 1px solid var(--highlight);
+            border-radius: 8px;
+            color: var(--highlight);
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            cursor: pointer;
+            transition: all var(--transition-base);
+        }
+
+        .logout-btn:hover {
+            background: var(--highlight-alpha);
+            transform: translateY(-2px);
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 48px;
+            color: var(--text-tertiary);
+        }
+
+        .empty-state svg {
+            width: 64px;
+            height: 64px;
+            margin-bottom: 16px;
+            opacity: 0.3;
+        }
+
+        .empty-state p {
+            font-size: 14px;
+            margin-bottom: 24px;
+        }
+
+        .add-investment-btn {
+            display: inline-block;
+            padding: 12px 32px;
+            background: var(--gradient-primary);
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            transition: all var(--transition-base);
+        }
+
+        .add-investment-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            nav {
+                padding: 20px 24px;
+            }
+
+            .nav-actions {
+                margin-right: 60px;
+            }
+
+            .theme-toggle {
+                width: 44px;
+                height: 44px;
+            }
+
+            .profile-container {
+                padding: 100px 24px 60px;
+            }
+
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .profile-badges {
+                justify-content: center;
+            }
+
+            .profile-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 16px;
+            }
+
+            .profile-content {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .profile-sidebar {
+                order: 2;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <div class="logo">CLON · BRICK</div>
+            <div class="nav-actions">
+                <a href="/" class="cta-nav">INICIO</a>
+                <a href="/settings" class="cta-nav secondary">CONFIGURACIÓN</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <div class="theme-icon">
+            <svg class="sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+    </button>
+
+    <!-- Profile Container -->
+    <div class="profile-container">
+        <div class="profile-wrapper">
+            <!-- Profile Header -->
+            <div class="profile-header">
+                <div class="profile-avatar">JP</div>
+                <div class="profile-info">
+                    <h1 class="profile-name">Juan Pérez</h1>
+                    <div class="profile-email">juan.perez@email.com</div>
+                    <div class="profile-badges">
+                        <span class="badge">Inversor Verificado</span>
+                        <span class="badge">Miembro desde 2024</span>
+                        <span class="badge">Nivel Gold</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Stats -->
+            <div class="profile-stats">
+                <div class="stat-card">
+                    <div class="stat-value">182</div>
+                    <div class="stat-label">Total Bricks</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">14.3M</div>
+                    <div class="stat-label">Inversión Total</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">148K</div>
+                    <div class="stat-label">Rentas Mensuales</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value">12.5%</div>
+                    <div class="stat-label">ROI Anual</div>
+                </div>
+            </div>
+
+            <!-- Content -->
+            <div class="profile-content">
+                <!-- Sidebar -->
+                <div class="profile-sidebar">
+                    <div class="sidebar-menu">
+                        <a href="#investments" class="menu-item active">Mis Inversiones</a>
+                        <a href="#documents" class="menu-item">Documentos</a>
+                        <a href="#transactions" class="menu-item">Transacciones</a>
+                        <a href="#referrals" class="menu-item">Referidos</a>
+                        <a href="#settings" class="menu-item">Configuración</a>
+                        <a href="#help" class="menu-item">Ayuda</a>
+                    </div>
+                    <button class="logout-btn" onclick="handleLogout()">Cerrar Sesión</button>
+                </div>
+
+                <!-- Main Content -->
+                <div class="profile-main">
+                    <h2 class="section-title">Mis Inversiones Activas</h2>
+                    <div class="investment-list">
+                        <div class="investment-item">
+                            <div class="investment-details">
+                                <div class="investment-title">Zona Franca Norte - Bodega A1</div>
+                                <div class="investment-date">Invertido: 15 Enero 2024</div>
+                            </div>
+                            <div class="investment-amount">
+                                <div class="amount-value">COP 7,840,000</div>
+                                <div class="amount-bricks">100 BRICKS</div>
+                            </div>
+                        </div>
+                        <div class="investment-item">
+                            <div class="investment-details">
+                                <div class="investment-title">Zona Franca Norte - Bodega A2</div>
+                                <div class="investment-date">Invertido: 28 Marzo 2024</div>
+                            </div>
+                            <div class="investment-amount">
+                                <div class="amount-value">COP 3,920,000</div>
+                                <div class="amount-bricks">50 BRICKS</div>
+                            </div>
+                        </div>
+                        <div class="investment-item">
+                            <div class="investment-details">
+                                <div class="investment-title">Zona Franca Norte - Bodega B1</div>
+                                <div class="investment-date">Invertido: 10 Junio 2024</div>
+                            </div>
+                            <div class="investment-amount">
+                                <div class="amount-value">COP 2,508,800</div>
+                                <div class="amount-bricks">32 BRICKS</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Si no hay inversiones, mostrar este estado vacío en su lugar -->
+                    <!-- <div class="empty-state">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect>
+                            <path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path>
+                        </svg>
+                        <p>Aún no tienes inversiones activas</p>
+                        <a href="/#calculator" class="add-investment-btn">Hacer Primera Inversión</a>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Check if logged in
+        if (!localStorage.getItem('isLoggedIn')) {
+            window.location.href = '/login';
+        }
+
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Handle Logout
+        function handleLogout() {
+            if (confirm('¿Estás seguro de que quieres cerrar sesión?')) {
+                localStorage.removeItem('isLoggedIn');
+                window.location.href = 'login.html';
+            }
+        }
+
+        // Handle Menu Navigation
+        document.querySelectorAll('.menu-item').forEach(item => {
+            item.addEventListener('click', function(e) {
+                e.preventDefault();
+                
+                // Remove active from all items
+                document.querySelectorAll('.menu-item').forEach(i => {
+                    i.classList.remove('active');
+                });
+                
+                // Add active to clicked item
+                this.classList.add('active');
+                
+                // Here you could load different content based on the clicked item
+                const section = this.getAttribute('href').replace('#', '');
+                console.log('Loading section:', section);
+            });
+        });
+    </script>
+</body>
+</html>

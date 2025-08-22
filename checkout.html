@@ -1,0 +1,1016 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CLON BRICK - Checkout</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            /* Dark Theme (Default) */
+            --bg-primary: hsl(240, 10%, 5%);
+            --bg-secondary: hsl(240, 8%, 8%);
+            --bg-tertiary: hsl(240, 6%, 12%);
+            --bg-elevated: hsl(240, 5%, 15%);
+            --text-primary: hsl(0, 0%, 96%);
+            --text-secondary: hsl(240, 3%, 66%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 5%, 34%);
+            --accent-primary: hsl(270, 80%, 60%);
+            --accent-primary-hover: hsl(270, 80%, 65%);
+            --accent-primary-alpha: hsla(270, 80%, 60%, 0.1);
+            --accent-secondary: hsl(280, 60%, 70%);
+            --accent-tertiary: hsl(250, 70%, 55%);
+            --success: hsl(180, 60%, 45%);
+            --warning: hsl(45, 70%, 50%);
+            --danger: hsl(0, 70%, 50%);
+            --border-subtle: hsla(0, 0%, 100%, 0.05);
+            --border-default: hsla(0, 0%, 100%, 0.1);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.5);
+            --gradient-primary: linear-gradient(135deg, var(--accent-primary) 0%, hsl(290, 80%, 60%) 100%);
+            --gradient-dark: linear-gradient(180deg, var(--bg-primary) 0%, var(--bg-secondary) 100%);
+            --transition-base: 0.3s ease;
+        }
+
+        [data-theme="light"] {
+            --bg-primary: hsl(0, 0%, 100%);
+            --bg-secondary: hsl(240, 5%, 98%);
+            --bg-tertiary: hsl(240, 5%, 96%);
+            --bg-elevated: hsl(0, 0%, 100%);
+            --text-primary: hsl(240, 10%, 10%);
+            --text-secondary: hsl(240, 5%, 34%);
+            --text-tertiary: hsl(240, 4%, 46%);
+            --text-muted: hsl(240, 3%, 66%);
+            --accent-primary: hsl(270, 80%, 50%);
+            --accent-primary-hover: hsl(270, 80%, 45%);
+            --accent-primary-alpha: hsla(270, 80%, 50%, 0.1);
+            --border-subtle: hsla(240, 10%, 10%, 0.06);
+            --border-default: hsla(240, 10%, 10%, 0.12);
+            --shadow-lg: 0 10px 25px rgba(0, 0, 0, 0.12);
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Helvetica Neue', 'Arial', sans-serif;
+            background: var(--gradient-dark);
+            color: var(--text-secondary);
+            line-height: 1.6;
+            min-height: 100vh;
+            transition: background-color 0.5s ease, color 0.5s ease;
+        }
+
+        /* Navigation */
+        nav {
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 1000;
+            padding: 32px 48px;
+            background: var(--bg-primary);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            transition: all var(--transition-base);
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        .nav-content {
+            max-width: 1400px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            font-size: 14px;
+            font-weight: 500;
+            letter-spacing: 0.1em;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+
+        /* Theme Toggle */
+        .theme-toggle {
+            position: fixed;
+            top: 32px;
+            right: 32px;
+            z-index: 9999;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-default);
+            width: 56px;
+            height: 56px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .theme-toggle:hover {
+            transform: scale(1.1);
+            border-color: var(--accent-primary);
+        }
+
+        .theme-icon {
+            width: 24px;
+            height: 24px;
+            position: relative;
+        }
+
+        .theme-icon svg {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            transition: all 0.5s cubic-bezier(0.23, 1, 0.32, 1);
+        }
+
+        [data-theme="dark"] .sun {
+            opacity: 1;
+        }
+
+        [data-theme="dark"] .moon {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(-180deg);
+        }
+
+        [data-theme="light"] .sun {
+            opacity: 0;
+            transform: translate(-50%, -50%) rotate(180deg);
+        }
+
+        [data-theme="light"] .moon {
+            opacity: 1;
+        }
+
+        /* Checkout Container */
+        .checkout-container {
+            min-height: 100vh;
+            padding: 120px 48px 80px;
+        }
+
+        .checkout-wrapper {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        /* Progress Steps */
+        .progress-steps {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 60px;
+            position: relative;
+        }
+
+        .progress-line {
+            position: absolute;
+            top: 20px;
+            left: 25%;
+            right: 25%;
+            height: 2px;
+            background: var(--border-subtle);
+            z-index: 0;
+        }
+
+        .progress-line-active {
+            position: absolute;
+            top: 20px;
+            left: 25%;
+            height: 2px;
+            background: var(--accent-primary);
+            z-index: 1;
+            transition: width 0.5s ease;
+        }
+
+        .step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+            position: relative;
+            z-index: 2;
+            flex: 1;
+            max-width: 200px;
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: var(--bg-elevated);
+            border: 2px solid var(--border-default);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 14px;
+            color: var(--text-tertiary);
+            transition: all var(--transition-base);
+        }
+
+        .step.active .step-circle {
+            background: var(--accent-primary);
+            border-color: var(--accent-primary);
+            color: white;
+        }
+
+        .step.completed .step-circle {
+            background: var(--success);
+            border-color: var(--success);
+            color: white;
+        }
+
+        .step-label {
+            font-size: 11px;
+            color: var(--text-tertiary);
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .step.active .step-label {
+            color: var(--accent-primary);
+        }
+
+        /* Checkout Grid */
+        .checkout-grid {
+            display: grid;
+            grid-template-columns: 1fr 400px;
+            gap: 48px;
+        }
+
+        /* Checkout Main */
+        .checkout-main {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .section-title {
+            font-size: 20px;
+            font-weight: 300;
+            color: var(--text-primary);
+            margin-bottom: 32px;
+            padding-bottom: 16px;
+            border-bottom: 1px solid var(--border-subtle);
+        }
+
+        /* Form Elements */
+        .form-group {
+            margin-bottom: 24px;
+        }
+
+        .form-label {
+            display: block;
+            font-size: 12px;
+            color: var(--text-tertiary);
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            margin-bottom: 8px;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 12px 16px;
+            background: var(--bg-secondary);
+            border: 1px solid var(--border-subtle);
+            border-radius: 8px;
+            color: var(--text-primary);
+            font-size: 14px;
+            transition: all var(--transition-base);
+            outline: none;
+        }
+
+        .form-input:focus {
+            border-color: var(--accent-primary);
+            box-shadow: 0 0 0 3px var(--accent-primary-alpha);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+
+        /* Payment Methods */
+        .payment-methods {
+            display: grid;
+            gap: 16px;
+            margin-bottom: 24px;
+        }
+
+        .payment-method {
+            padding: 20px;
+            background: var(--bg-secondary);
+            border: 2px solid var(--border-subtle);
+            border-radius: 8px;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            position: relative;
+        }
+
+        .payment-method:hover {
+            border-color: var(--accent-primary);
+        }
+
+        .payment-method.selected {
+            border-color: var(--accent-primary);
+            background: var(--accent-primary-alpha);
+        }
+
+        .payment-method input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+        }
+
+        .payment-method-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+
+        .payment-method-title {
+            font-size: 14px;
+            color: var(--text-primary);
+            font-weight: 500;
+        }
+
+        .payment-method-badge {
+            font-size: 10px;
+            padding: 4px 8px;
+            background: var(--success);
+            color: white;
+            border-radius: 4px;
+            text-transform: uppercase;
+        }
+
+        .payment-method-description {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        /* Order Summary */
+        .checkout-sidebar {
+            position: sticky;
+            top: 120px;
+            height: fit-content;
+        }
+
+        .order-summary {
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-subtle);
+            border-radius: 12px;
+            padding: 32px;
+        }
+
+        .summary-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 16px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-bottom: 16px;
+        }
+
+        .summary-item-info {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .summary-item-title {
+            font-size: 14px;
+            color: var(--text-primary);
+        }
+
+        .summary-item-quantity {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        .summary-item-price {
+            font-size: 16px;
+            color: var(--text-primary);
+            font-weight: 300;
+        }
+
+        .summary-divider {
+            height: 1px;
+            background: var(--border-subtle);
+            margin: 24px 0;
+        }
+
+        .summary-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .summary-label {
+            font-size: 12px;
+            color: var(--text-tertiary);
+        }
+
+        .summary-value {
+            font-size: 14px;
+            color: var(--text-secondary);
+        }
+
+        .summary-total {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-top: 24px;
+            padding-top: 24px;
+            border-top: 1px solid var(--border-subtle);
+        }
+
+        .summary-total .summary-label {
+            font-size: 14px;
+            font-weight: 500;
+            color: var(--text-primary);
+        }
+
+        .summary-total .summary-value {
+            font-size: 24px;
+            font-weight: 300;
+            color: var(--accent-primary);
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin-top: 32px;
+        }
+
+        .btn {
+            padding: 14px 32px;
+            border: none;
+            border-radius: 8px;
+            font-size: 12px;
+            font-weight: 500;
+            letter-spacing: 0.05em;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all var(--transition-base);
+            text-decoration: none;
+            display: inline-block;
+            text-align: center;
+        }
+
+        .btn-primary {
+            background: var(--gradient-primary);
+            color: white;
+            flex: 1;
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--shadow-lg);
+        }
+
+        .btn-secondary {
+            background: transparent;
+            border: 1px solid var(--border-default);
+            color: var(--text-secondary);
+        }
+
+        .btn-secondary:hover {
+            border-color: var(--accent-primary);
+            color: var(--accent-primary);
+        }
+
+        /* Security Badge */
+        .security-badge {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px;
+            background: var(--bg-secondary);
+            border-radius: 8px;
+            margin-top: 24px;
+        }
+
+        .security-icon {
+            width: 16px;
+            height: 16px;
+            color: var(--success);
+        }
+
+        .security-text {
+            font-size: 11px;
+            color: var(--text-tertiary);
+        }
+
+        /* Loading State */
+        .loading {
+            display: none;
+            text-align: center;
+            padding: 48px;
+        }
+
+        .loading.active {
+            display: block;
+        }
+
+        .spinner {
+            width: 40px;
+            height: 40px;
+            margin: 0 auto 16px;
+            border: 3px solid var(--border-subtle);
+            border-top-color: var(--accent-primary);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        /* Success State */
+        .success-state {
+            display: none;
+            text-align: center;
+            padding: 48px;
+        }
+
+        .success-state.active {
+            display: block;
+        }
+
+        .success-icon {
+            width: 64px;
+            height: 64px;
+            margin: 0 auto 24px;
+            background: var(--success);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 32px;
+        }
+
+        .success-title {
+            font-size: 24px;
+            color: var(--text-primary);
+            margin-bottom: 12px;
+        }
+
+        .success-message {
+            font-size: 14px;
+            color: var(--text-secondary);
+            margin-bottom: 32px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .checkout-container {
+                padding: 100px 24px 60px;
+            }
+
+            .checkout-grid {
+                grid-template-columns: 1fr;
+                gap: 32px;
+            }
+
+            .checkout-sidebar {
+                position: relative;
+                top: 0;
+            }
+
+            .progress-steps {
+                margin-bottom: 40px;
+            }
+
+            .step-label {
+                font-size: 10px;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body data-theme="dark">
+    <!-- Navigation -->
+    <nav>
+        <div class="nav-content">
+            <a href="/" class="logo">CLON · BRICK</a>
+        </div>
+    </nav>
+
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" aria-label="Cambiar tema">
+        <div class="theme-icon">
+            <svg class="sun" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <circle cx="12" cy="12" r="5"></circle>
+                <line x1="12" y1="1" x2="12" y2="3"></line>
+                <line x1="12" y1="21" x2="12" y2="23"></line>
+                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+                <line x1="1" y1="12" x2="3" y2="12"></line>
+                <line x1="21" y1="12" x2="23" y2="12"></line>
+                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+            <svg class="moon" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+        </div>
+    </button>
+
+    <!-- Checkout Container -->
+    <div class="checkout-container">
+        <div class="checkout-wrapper">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="progress-line"></div>
+                <div class="progress-line-active" id="progressLine" style="width: 0%"></div>
+                
+                <div class="step active" id="step1">
+                    <div class="step-circle">1</div>
+                    <div class="step-label">Carrito</div>
+                </div>
+                <div class="step" id="step2">
+                    <div class="step-circle">2</div>
+                    <div class="step-label">Pago</div>
+                </div>
+                <div class="step" id="step3">
+                    <div class="step-circle">3</div>
+                    <div class="step-label">Confirmación</div>
+                </div>
+            </div>
+
+            <!-- Checkout Grid -->
+            <div class="checkout-grid">
+                <!-- Main Content -->
+                <div class="checkout-main">
+                    <!-- Step 1: Cart Review -->
+                    <div id="step1Content" class="step-content">
+                        <h2 class="section-title">Revisión del Pedido</h2>
+                        
+                        <div class="summary-item">
+                            <div class="summary-item-info">
+                                <div class="summary-item-title">BRICK - Zona Franca Norte</div>
+                                <div class="summary-item-quantity">
+                                    Cantidad: 
+                                    <input type="number" id="brickQuantity" value="1" min="1" max="500" style="width: 60px; margin-left: 8px; padding: 4px 8px; background: var(--bg-elevated); border: 1px solid var(--border-subtle); border-radius: 4px; color: var(--text-primary);">
+                                </div>
+                            </div>
+                            <div class="summary-item-price">COP 78,400</div>
+                        </div>
+
+                        <div class="form-group">
+                            <label class="form-label">Código de Descuento (Opcional)</label>
+                            <div style="display: flex; gap: 12px;">
+                                <input type="text" class="form-input" placeholder="Ingresa tu código" id="discountCode">
+                                <button class="btn btn-secondary" style="width: auto;" onclick="applyDiscount()">Aplicar</button>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <a href="/" class="btn btn-secondary">Volver al Inicio</a>
+                            <button class="btn btn-primary" onclick="nextStep()">Continuar al Pago</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 2: Payment -->
+                    <div id="step2Content" class="step-content" style="display: none;">
+                        <h2 class="section-title">Método de Pago</h2>
+                        
+                        <div class="payment-methods">
+                            <label class="payment-method selected">
+                                <input type="radio" name="payment" value="crypto" checked>
+                                <div class="payment-method-header">
+                                    <span class="payment-method-title">Criptomonedas</span>
+                                    <span class="payment-method-badge">Recomendado</span>
+                                </div>
+                                <div class="payment-method-description">
+                                    Paga con USDT, USDC, ETH o BTC. Confirmación instantánea.
+                                </div>
+                            </label>
+
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="bank">
+                                <div class="payment-method-header">
+                                    <span class="payment-method-title">Transferencia Bancaria</span>
+                                </div>
+                                <div class="payment-method-description">
+                                    Transferencia desde tu banco. Procesamiento en 24-48 horas.
+                                </div>
+                            </label>
+
+                            <label class="payment-method">
+                                <input type="radio" name="payment" value="card">
+                                <div class="payment-method-header">
+                                    <span class="payment-method-title">Tarjeta de Crédito/Débito</span>
+                                </div>
+                                <div class="payment-method-description">
+                                    Visa, Mastercard, American Express. Cargo adicional del 3%.
+                                </div>
+                            </label>
+                        </div>
+
+                        <div id="cryptoPayment">
+                            <div class="form-group">
+                                <label class="form-label">Selecciona la Criptomoneda</label>
+                                <select class="form-input">
+                                    <option>USDT (TRC-20)</option>
+                                    <option>USDT (ERC-20)</option>
+                                    <option>USDC</option>
+                                    <option>ETH</option>
+                                    <option>BTC</option>
+                                </select>
+                            </div>
+
+                            <div class="form-group">
+                                <label class="form-label">Wallet de Origen</label>
+                                <input type="text" class="form-input" placeholder="0x...">
+                            </div>
+                        </div>
+
+                        <div id="bankPayment" style="display: none;">
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Banco</label>
+                                    <select class="form-input">
+                                        <option>Bancolombia</option>
+                                        <option>BBVA</option>
+                                        <option>Davivienda</option>
+                                        <option>Banco de Bogotá</option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">Tipo de Cuenta</label>
+                                    <select class="form-input">
+                                        <option>Ahorros</option>
+                                        <option>Corriente</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div id="cardPayment" style="display: none;">
+                            <div class="form-group">
+                                <label class="form-label">Número de Tarjeta</label>
+                                <input type="text" class="form-input" placeholder="0000 0000 0000 0000" maxlength="19">
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group">
+                                    <label class="form-label">Fecha de Vencimiento</label>
+                                    <input type="text" class="form-input" placeholder="MM/AA" maxlength="5">
+                                </div>
+                                <div class="form-group">
+                                    <label class="form-label">CVV</label>
+                                    <input type="text" class="form-input" placeholder="000" maxlength="3">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="btn-group">
+                            <button class="btn btn-secondary" onclick="previousStep()">Atrás</button>
+                            <button class="btn btn-primary" onclick="processPayment()">Procesar Pago</button>
+                        </div>
+                    </div>
+
+                    <!-- Step 3: Confirmation -->
+                    <div id="step3Content" class="step-content" style="display: none;">
+                        <!-- Loading State -->
+                        <div class="loading active" id="loadingState">
+                            <div class="spinner"></div>
+                            <p style="color: var(--text-secondary);">Procesando tu pago...</p>
+                        </div>
+
+                        <!-- Success State -->
+                        <div class="success-state" id="successState">
+                            <div class="success-icon">✓</div>
+                            <h2 class="success-title">¡Compra Exitosa!</h2>
+                            <p class="success-message">
+                                Has adquirido <span id="finalBricks">1</span> BRICK(s) por un total de COP <span id="finalAmount">78,400</span>
+                            </p>
+                            <p style="font-size: 12px; color: var(--text-tertiary); margin-bottom: 32px;">
+                                ID de Transacción: #BRICK-2024-<span id="transactionId">000000</span><br>
+                                Recibirás un email de confirmación en los próximos minutos.
+                            </p>
+                            <div class="btn-group">
+                                <a href="/profile" class="btn btn-secondary">Ver Mi Portfolio</a>
+                                <a href="/" class="btn btn-primary">Comprar Más BRICKS</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Sidebar -->
+                <div class="checkout-sidebar">
+                    <div class="order-summary">
+                        <h3 style="font-size: 16px; font-weight: 400; color: var(--text-primary); margin-bottom: 24px;">
+                            Resumen del Pedido
+                        </h3>
+
+                        <div class="summary-row">
+                            <span class="summary-label">Subtotal</span>
+                            <span class="summary-value" id="subtotal">COP 78,400</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Descuento</span>
+                            <span class="summary-value" id="discount">COP 0</span>
+                        </div>
+                        <div class="summary-row">
+                            <span class="summary-label">Comisión Plataforma</span>
+                            <span class="summary-value">COP 0</span>
+                        </div>
+
+                        <div class="summary-total">
+                            <span class="summary-label">Total a Pagar</span>
+                            <span class="summary-value" id="total">COP 78,400</span>
+                        </div>
+
+                        <div class="security-badge">
+                            <svg class="security-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path>
+                            </svg>
+                            <span class="security-text">Pago 100% seguro y encriptado</span>
+                        </div>
+
+                        <div style="margin-top: 24px; padding-top: 24px; border-top: 1px solid var(--border-subtle);">
+                            <p style="font-size: 11px; color: var(--text-tertiary); line-height: 1.6;">
+                                Al realizar esta compra, aceptas nuestros <a href="/terms" style="color: var(--accent-primary);">términos y condiciones</a> 
+                                y la <a href="/privacy" style="color: var(--accent-primary);">política de privacidad</a>.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        body.setAttribute('data-theme', savedTheme);
+        
+        themeToggle.addEventListener('click', function() {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        });
+
+        // Constants
+        const BRICK_PRICE = 78400;
+        let currentStep = 1;
+        let discountAmount = 0;
+
+        // Update total when quantity changes
+        document.getElementById('brickQuantity').addEventListener('input', updateTotal);
+
+        function updateTotal() {
+            const quantity = parseInt(document.getElementById('brickQuantity').value) || 1;
+            const subtotal = quantity * BRICK_PRICE;
+            const total = subtotal - discountAmount;
+            
+            document.getElementById('subtotal').textContent = 'COP ' + formatNumber(subtotal);
+            document.getElementById('total').textContent = 'COP ' + formatNumber(total);
+        }
+
+        function formatNumber(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+        }
+
+        // Apply discount
+        function applyDiscount() {
+            const code = document.getElementById('discountCode').value.toUpperCase();
+            if (code === 'EARLY2024') {
+                discountAmount = BRICK_PRICE * 0.1; // 10% discount
+                document.getElementById('discount').textContent = 'COP ' + formatNumber(discountAmount);
+                updateTotal();
+                alert('¡Descuento del 10% aplicado!');
+            } else {
+                alert('Código de descuento inválido');
+            }
+        }
+
+        // Payment method selection
+        document.querySelectorAll('input[name="payment"]').forEach(radio => {
+            radio.addEventListener('change', function() {
+                // Remove selected class from all
+                document.querySelectorAll('.payment-method').forEach(method => {
+                    method.classList.remove('selected');
+                });
+                
+                // Add selected class to parent
+                this.parentElement.classList.add('selected');
+                
+                // Show/hide payment forms
+                document.getElementById('cryptoPayment').style.display = 'none';
+                document.getElementById('bankPayment').style.display = 'none';
+                document.getElementById('cardPayment').style.display = 'none';
+                
+                if (this.value === 'crypto') {
+                    document.getElementById('cryptoPayment').style.display = 'block';
+                } else if (this.value === 'bank') {
+                    document.getElementById('bankPayment').style.display = 'block';
+                } else if (this.value === 'card') {
+                    document.getElementById('cardPayment').style.display = 'block';
+                }
+            });
+        });
+
+        // Step navigation
+        function nextStep() {
+            if (currentStep < 3) {
+                // Hide current step
+                document.getElementById(`step${currentStep}Content`).style.display = 'none';
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                document.getElementById(`step${currentStep}`).classList.add('completed');
+                
+                // Show next step
+                currentStep++;
+                document.getElementById(`step${currentStep}Content`).style.display = 'block';
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                
+                // Update progress line
+                const progressWidth = ((currentStep - 1) / 2) * 50;
+                document.getElementById('progressLine').style.width = progressWidth + '%';
+            }
+        }
+
+        function previousStep() {
+            if (currentStep > 1) {
+                // Hide current step
+                document.getElementById(`step${currentStep}Content`).style.display = 'none';
+                document.getElementById(`step${currentStep}`).classList.remove('active');
+                
+                // Show previous step
+                currentStep--;
+                document.getElementById(`step${currentStep}`).classList.remove('completed');
+                document.getElementById(`step${currentStep}`).classList.add('active');
+                document.getElementById(`step${currentStep}Content`).style.display = 'block';
+                
+                // Update progress line
+                const progressWidth = ((currentStep - 1) / 2) * 50;
+                document.getElementById('progressLine').style.width = progressWidth + '%';
+            }
+        }
+
+        function processPayment() {
+            nextStep();
+            
+            // Simulate payment processing
+            setTimeout(() => {
+                document.getElementById('loadingState').classList.remove('active');
+                document.getElementById('successState').classList.add('active');
+                
+                // Update final values
+                const quantity = parseInt(document.getElementById('brickQuantity').value) || 1;
+                const total = (quantity * BRICK_PRICE) - discountAmount;
+                document.getElementById('finalBricks').textContent = quantity;
+                document.getElementById('finalAmount').textContent = formatNumber(total);
+                
+                // Generate transaction ID
+                const transactionId = Math.floor(100000 + Math.random() * 900000);
+                document.getElementById('transactionId').textContent = transactionId;
+                
+                // Mark step 3 as completed
+                document.getElementById('step3').classList.add('completed');
+                document.getElementById('progressLine').style.width = '100%';
+            }, 3000);
+        }
+
+        // Format card number input
+        const cardInput = document.querySelector('input[placeholder="0000 0000 0000 0000"]');
+        if (cardInput) {
+            cardInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\s/g, '');
+                let formattedValue = value.match(/.{1,4}/g)?.join(' ') || value;
+                e.target.value = formattedValue;
+            });
+        }
+
+        // Format expiry date input
+        const expiryInput = document.querySelector('input[placeholder="MM/AA"]');
+        if (expiryInput) {
+            expiryInput.addEventListener('input', function(e) {
+                let value = e.target.value.replace(/\D/g, '');
+                if (value.length >= 2) {
+                    value = value.slice(0, 2) + '/' + value.slice(2, 4);
+                }
+                e.target.value = value;
+            });
+        }
+    </script>
+</body>
+</html>
